@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROXY ANDROID · BY DUARTE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #0b0b0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #14141c;
+            border-radius: 32px;
+            padding: 40px 28px 36px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a2a3a;
+            text-align: center;
+            transition: 0.25s ease;
+        }
+
+        .login-container h1 {
+            color: #e0e0ff;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px #6a4aff;
+        }
+
+        .login-container .sub {
+            color: #a855f7;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            margin-top: 4px;
+            border-bottom: 1px solid #2e2e42;
+            padding-bottom: 24px;
+        }
+
+        .login-container .key-input {
+            margin: 32px 0 20px;
+        }
+
+        .login-container .key-input input {
+            width: 100%;
+            padding: 16px 18px;
+            background: #1a1a28;
+            border: 2px solid #2a2a42;
+            border-radius: 40px;
+            color: #e0e0ff;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 4px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .login-container .key-input input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 20px #7c3aed44;
+        }
+
+        .login-container .key-input input::placeholder {
+            color: #4a4a6a;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px 0;
+            background: #7c3aed;
+            border: none;
+            border-radius: 40px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .login-btn:hover {
+            background: #6d28d9;
+            box-shadow: 0 0 28px #7c3aed88;
+            transform: scale(1.02);
+        }
+
+        .login-btn:active {
+            transform: scale(0.96);
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 13px;
+            margin-top: 14px;
+            min-height: 20px;
+            font-weight: 500;
+        }
+
+        .footnote-login {
+            margin-top: 28px;
+            color: #4a4a6a;
+            font-size: 11px;
+            border-top: 1px solid #1e1e30;
+            padding-top: 18px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-12px); }
+            75% { transform: translateX(12px); }
+        }
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        /* ===== PANEL ===== */
+        .main-app {
+            display: none;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        .panel-container {
+            background: #14141c;
+            border-radius: 32px;
+            padding: 28px 22px 32px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a2a3a;
+        }
+
+        .panel-header {
+            text-align: center;
+            border-bottom: 1px solid #2e2e42;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h1 {
+            color: #e0e0ff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px #6a4aff;
+        }
+
+        .panel-header .owner {
+            color: #a855f7;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        /* ===== НОВЫЙ БЛОК ИНСТРУКЦИЙ (добавлен ниже DONO) ===== */
+        .howto-block {
+            background: #10101a;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 10px 0 16px 0;
+            border: 1px solid #2a2a3a;
+            text-align: left;
+            color: #c4c4e0;
+            font-size: 13px;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+        .howto-block .howto-title {
+            color: #a855f7;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .howto-block .step {
+            color: #e0e0ff;
+            font-weight: 500;
+        }
+        .howto-block .step-desc {
+            color: #9a9ab0;
+        }
+
+        .functions-title {
+            color: #c4c4e0;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            border-left: 4px solid #7c3aed;
+            padding-left: 12px;
+        }
+
+        .function-item {
+            background: #10101a;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border: 1px solid #28283a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.15s;
+        }
+
+        .function-item .func-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .function-item .func-name {
+            color: #e0e0ff;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .function-item .func-desc {
+            color: #7a7a9a;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .switch-box {
+            width: 44px;
+            height: 26px;
+            background: #000000;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+            position: relative;
+            border: 2px solid #2a2a3a;
+        }
+
+        .switch-box.active {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            box-shadow: 0 0 16px #7c3aed55;
+        }
+
+        .switch-box::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            background: #4a4a6a;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .switch-box.active::after {
+            left: 21px;
+            background: #ffffff;
+        }
+
+        .inject-btn {
+            width: 100%;
+            padding: 14px 0;
+            background: #7c3aed;
+            border: none;
+            border-radius: 40px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 3px;
+            margin-top: 18px;
+        }
+
+        .inject-btn:hover {
+            background: #6d28d9;
+            box-shadow: 0 0 28px #7c3aed88;
+            transform: scale(1.02);
+        }
+
+        .inject-btn:active {
+            transform: scale(0.96);
+        }
+
+        .footer-panel {
+            margin-top: 18px;
+            color: #4a4a6a;
+            font-size: 11px;
+            text-align: center;
+            border-top: 1px solid #1e1e30;
+            padding-top: 16px;
+        }
+
+        @media (max-width: 460px) {
+            .login-container, .panel-container {
+                padding: 20px 14px;
+            }
+            .function-item {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginPage" class="login-container">
+        <h1>PROXY ANDROID</h1>
+        <div class="sub">AUTENTICAÇÃO</div>
+
+        <div class="key-input">
+            <input type="password" id="keyField" placeholder="INSIRA SUA CHAVE" maxlength="20" autofocus>
+        </div>
+
+        <button class="login-btn" id="loginBtn">ACESSAR PAINEL</button>
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="footnote-login">
+            NÃO TEM UMA CHAVE? CLIQUE AQUI
+        </div>
+    </div>
+
+    <!-- PAINEL PRINCIPAL -->
+    <div id="mainApp" class="main-app">
+        <div class="panel-container">
+
+            <!-- CABEÇALHO com DONO -->
+            <div class="panel-header">
+                <h1>PROXY ANDROID</h1>
+                <div class="owner">DONO: DUARTE MODDER</div>
+
+                <!-- ===== НОВЫЙ БЛОК "COMO USAR O PROXY" ===== -->
+                <div class="howto-block">
+                    <div class="howto-title">📌 COMO USAR O PROXY👇</div>
+                    <div><span class="step">1)</span> <span class="step-desc">CRIE UM ARQUIVO COM O NOME localconfig.json</span></div>
+                    <div><span class="step">2)</span> <span class="step-desc">cole ele na pasta files do freefire</span></div>
+                    <div><span class="step">3)</span> <span class="step-desc">ATIVE A FUNÇÃO QUE VOCÊ DESEJA USAR</span></div>
+                    <div><span class="step">4)</span> <span class="step-desc">COPIE E COLE DENTRO DO ARQUIVO localconfig.json</span></div>
+                    <div><span class="step">5)</span> <span class="step-desc">PRONTO AGORA E SO SER FELIZ!!!</span></div>
+                </div>
+                <!-- ===== КОНЕЦ БЛОКА ===== -->
+            </div>
+
+            <!-- FUNCOES -->
+            <div class="functions-title">⚡ FUNCOES</div>
+
+            <div class="function-item">
+                <div class="func-info">
+                    <span class="func-name">HS ALTO</span>
+                    <span class="func-desc">HS Acima da Cabeça</span>
+                </div>
+                <div class="switch-box" onclick="toggleBox(this)"></div>
+            </div>
+
+            <div class="function-item">
+                <div class="func-info">
+                    <span class="func-name">HS PEITO</span>
+                    <span class="func-desc">HS FULL</span>
+                </div>
+                <div class="switch-box" onclick="toggleBox(this)"></div>
+            </div>
+
+            <div class="function-item">
+                <div class="func-info">
+                    <span class="func-name">HS NECK</span>
+                    <span class="func-desc">HS Pescoço Legit</span>
+                </div>
+                <div class="switch-box" onclick="toggleBox(this)"></div>
+            </div>
+
+            <div class="function-item">
+                <div class="func-info">
+                    <span class="func-name">BYPASS</span>
+                    <span class="func-desc">ant detect</span>
+                </div>
+                <div class="switch-box" onclick="toggleBox(this)"></div>
+            </div>
+
+            <button class="inject-btn" id="injectBtn">INJETAR</button>
+
+            <div class="footer-panel">PROXY ANDROID · BY DUARTE MODDER</div>
+        </div>
+    </div>
+
+    <script>
+    // ==== переключение switch ====
+    function toggleBox(el) {
+        el.classList.toggle('active');
+        if (el.classList.contains('active')) {
+            el.style.background = '#7c3aed';
+            el.style.borderColor = '#7c3aed';
+        } else {
+            el.style.background = '#000';
+            el.style.borderColor = '#2a2a3a';
+        }
+    }
+
+    document.querySelectorAll('.switch-box').forEach(el => {
+        el.classList.remove('active');
+        el.style.background = '#000';
+        el.style.borderColor = '#2a2a3a';
+    });
+
+    // ==== логин ====
+    const loginBtn = document.getElementById('loginBtn');
+    const keyField = document.getElementById('keyField');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginPage = document.getElementById('loginPage');
+    const mainApp = document.getElementById('mainApp');
+    const VALID_KEY = "PROXY-ANDROID-QT92S";
+
+    function attemptLogin() {
+        const inputKey = keyField.value.trim();
+        if (inputKey === VALID_KEY) {
+            loginPage.style.display = 'none';
+            mainApp.classList.add('active');
+            errorMsg.textContent = '';
+        } else {
+            errorMsg.textContent = '❌ CHAVE INVÁLIDA! TENTE NOVAMENTE.';
+            keyField.value = '';
+            keyField.focus();
+            loginPage.classList.add('shake');
+            setTimeout(() => loginPage.classList.remove('shake'), 400);
+        }
+    }
+
+    loginBtn.addEventListener('click', attemptLogin);
+    keyField.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+
+    // ==== COPIAR ====
+    function copiarTexto(texto) {
+        navigator.clipboard.writeText(texto).then(() => {
+            alert('COPIADO COM SUCESSO!✅\n\nAgora cole no localconfig.json');
+        }).catch(() => {
+            alert('ERRO AO COPIAR. COPIE MANUALMENTE');
+        });
+    }
+
+    // ==== INJETAR ====
+    document.getElementById('injectBtn').addEventListener('click', function() {
+        const switches = document.querySelectorAll('.switch-box');
+
+        // COLOCA O CÓDIGO DE CADA FUNÇÃO AQUI
+        const codigos = [
+            '"verAddr":"https://version.andremodsgostoso.online/live/","resetGuest":true,"fakeVersion":"2.131."}', // 0 = HS ALTO
+            '"verAddr":"https://version.andremodsgostoso.online/live/","resetGuest":true,"fakeVersion":"2.131."}', // 1 = HS PEITO
+            '{"verAddr":"https://version.andremodsgostoso.online/live/","resetGuest":true,"fakeVersion":"2.131."}', // 2 = HS NECK
+            '{"só remover o arquivo localconfig.json' // 3 = BYPASS
+        ];
+
+        const nomes = ["HS ALTO", "HS PEITO", "HS NECK", "BYPASS"];
+        let achou = false;
+
+        switches.forEach((s, i) => {
+            if(s.classList.contains('active') &&!achou) {
+                achou = true;
+                const textoParaInjetar = codigos[i];
+                const nomeFuncao = nomes[i];
+
+                const caixa = `
+✅ ${nomeFuncao} GERADO COM SUCESSO!
+
+1. CLIQUE EM COPIAR
+2. ABRA: /Android/data/com.dts.freefiremax/files/localconfig.json
+3. COLE E SALVE
+
+TEXTO:
+${textoParaInjetar}
+                `;
+                if(confirm(caixa + '\n\nDeseja copiar agora?')) {
+                    copiarTexto(textoParaInjetar);
+                }
+            }
+        });
+
+        if(!achou) {
+            alert('ATIVE UMA FUNÇÃO❌');
+        }
+
+        this.style.transform = 'scale(0.96)';
+        setTimeout(() => { this.style.transform = ''; }, 150);
+    });
+    </script>
+
+</body>
+</html>
